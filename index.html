@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>closet miri products</title>
+    <style>
+        /* =====================================================================
+           ESTILOS VISUALES (CSS)
+           ===================================================================== */
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #121212; color: #ffffff; margin: 0; padding: 20px; }
+        
+        /* Utilidades */
+        .oculto { display: none !important; }
+        .btn { padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: 0.3s; }
+        .btn-primary { background-color: #ff4b4b; color: white; width: 100%; }
+        .btn-primary:hover { background-color: #ff3333; }
+        .btn-secondary { background-color: #333; color: white; width: 100%; border: 1px solid #555; }
+        .btn-secondary:hover { background-color: #444; }
+        .btn-whatsapp { background-color: #25d366; color: white; width: 100%; font-size: 1.2rem; padding: 15px; display: block; text-align: center; text-decoration: none; border-radius: 10px; }
+        
+        /* Contenedor de Cristal (Pantalla de Bienvenida) */
+        .contenedor-cristal {
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 60px 40px; text-align: center; margin-top: 80px; max-width: 600px;
+            margin-left: auto; margin-right: auto; box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+        }
+        .input-nombre { width: 100%; padding: 12px; font-size: 1.1rem; border-radius: 5px; border: 1px solid #333; background: #222; color: white; margin-bottom: 20px; }
+        
+        /* Estilos Header Tienda */
+        .header-tienda { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 20px; }
+        .header-acciones { display: flex; gap: 10px; }
+        
+        /* Tabs */
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #333; }
+        .tab { padding: 10px 20px; cursor: pointer; color: #b3b3b3; border-bottom: 2px solid transparent; }
+        .tab.activo { color: white; border-bottom: 2px solid #ff4b4b; font-weight: bold; }
+        
+        /* Estilos Catálogo (Grid) */
+        .grid-productos { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .tarjeta-prod { background: #1e1e1e; padding: 15px; border-radius: 10px; display: flex; flex-direction: column; justify-content: space-between;}
+        .tarjeta-prod img { width: 100%; border-radius: 5px; margin-bottom: 15px; aspect-ratio: 1; object-fit: cover; }
+        .etiqueta-tag { color: #ff5a36; font-size: 0.95rem; font-weight: 700; margin-bottom: 2px; }
+        .titulo-prod { color: #ffffff; font-size: 1.15rem; font-weight: 600; margin-bottom: 1px; }
+        .subtitulo-prod { color: #757575; font-size: 1rem; margin-bottom: 4px; }
+        .precio-prod { color: #ffffff; font-size: 1.15rem; font-weight: 500; margin-bottom: 15px; }
+        
+        /* Estilos Detalle */
+        .detalle-container { display: grid; grid-template-columns: 1fr 2fr; gap: 40px; margin-top: 20px; }
+        @media (max-width: 768px) { .detalle-container { grid-template-columns: 1fr; } }
+        .galeria-minis { display: flex; gap: 10px; margin-top: 10px; justify-content: center; }
+        .galeria-minis img { width: 60px; height: 60px; object-fit: cover; cursor: pointer; border: 2px solid transparent; border-radius: 5px; }
+        .galeria-minis img:hover { border-color: #ff4b4b; }
+        .badge-detalle { background-color: #7c3aed; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; display: inline-block; margin-bottom: 15px; }
+        .titulo-detalle { font-size: 2.2rem; font-weight: 700; line-height: 1.2; margin-bottom: 5px; }
+        .calif-detalle { color: #ffb400; font-size: 1rem; margin-bottom: 20px; }
+        .seccion-descripcion { border-top: 1px solid #333; border-bottom: 1px solid #333; padding: 20px 0; margin-bottom: 20px; }
+        .precio-anterior { text-decoration: line-through; color: #757575; font-size: 1.2rem; margin-right: 10px; }
+        .precio-actual { color: #ffffff; font-size: 1.8rem; font-weight: 700; }
+        .input-cantidad { width: 80px; padding: 10px; font-size: 1.1rem; border-radius: 5px; border: 1px solid #333; background: #222; color: white; }
+        
+        /* Bolsa de compras */
+        .item-carrito { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding: 15px 0; }
+        .item-carrito img { width: 80px; height: 80px; object-fit: cover; border-radius: 5px; }
+        .item-info { flex-grow: 1; padding: 0 20px; }
+    </style>
+</head>
+<body>
+
+    <!-- PANTALLA 1: INICIO (CRISTAL) -->
+    <div id="pantalla-inicio" class="contenedor-cristal oculto">
+        <h1 style='font-size: 3.5rem; font-weight: 800; margin-top: 0;'>closet miri products</h1>
+        <p style='font-size: 1.3rem; color: #b3b3b3;'>Te damos la bienvenida. Ingresa tu nombre para comenzar:</p>
+        <input type="text" id="input-nombre" class="input-nombre" placeholder="Tu nombre aquí...">
+        <button class="btn btn-primary" onclick="entrarTienda()">Entrar a la tienda</button>
+        <p id="error-nombre" style="color: #ff4b4b; display: none;">Por favor, escribe un nombre válido.</p>
+    </div>
+
+    <!-- PANTALLA 2: TIENDA / CATÁLOGO -->
+    <div id="pantalla-tienda" class="oculto">
+        <div class="header-tienda">
+            <div>
+                <h1 style='margin-bottom: 0; margin-top: 0;'>closet miri products</h1>
+                <p style='color: #b3b3b3; margin-top: 5px;'>¡Hola, de nuevo, <b id="nombre-usuario-display"></b>! ✨</p>
+            </div>
+            <div class="header-acciones">
+                <button class="btn btn-secondary" onclick="mostrarCarrito()" id="btn-bolsa">🛍️ Mi Bolsa (0)</button>
+                <button class="btn btn-secondary" onclick="cerrarSesion()">Cerrar sesión</button>
+            </div>
+        </div>
+
+        <div class="tabs" id="contenedor-tabs">
+            <div class="tab activo" onclick="cambiarTab('Maquillaje')">Maquillaje</div>
+            <div class="tab" onclick="cambiarTab('Ropa y Tenis')">Ropa y Tenis</div>
+            <div class="tab" onclick="cambiarTab('Perfumes')">Perfumes</div>
+        </div>
+
+        <div id="grid-productos" class="grid-productos">
+            <!-- Los productos se inyectan aquí con JavaScript -->
+        </div>
+    </div>
+
+    <!-- PANTALLA 3: DETALLE DEL PRODUCTO -->
+    <div id="pantalla-detalle" class="oculto">
+        <button class="btn btn-secondary" style="width: auto; margin-bottom: 20px;" onclick="volverCatálogo()">← Volver al catálogo</button>
+        <div id="contenedor-detalle">
+            <!-- El detalle se inyecta aquí con JavaScript -->
+        </div>
+    </div>
+
+    <!-- PANTALLA 4: CARRITO DE COMPRAS -->
+    <div id="pantalla-carrito" class="oculto">
+        <button class="btn btn-secondary" style="width: auto; margin-bottom: 20px;" onclick="volverCatálogo()">← Volver a la Tienda</button>
+        <h1 style="margin-top: 0;">🛍️ Tu Bolsa de Compras</h1>
+        <hr style="border-color: #333;">
+        
+        <div id="lista-carrito">
+            <!-- Los items del carrito se inyectan aquí -->
+        </div>
+        
+        <div id="resumen-carrito" class="oculto">
+            <h2 style="text-align: right;">Total a Pagar: <span style='color:#00e676;' id="total-carrito">$0.00 MXN</span></h2>
+            <br>
+            <a id="btn-whatsapp" href="#" target="_blank" class="btn-whatsapp">
+                🟢 Finalizar pedido y enviar por WhatsApp
+            </a>
+        </div>
+    </div>
+
+    <!-- =====================================================================
+         LÓGICA DE LA APLICACIÓN (JAVASCRIPT)
+         ===================================================================== -->
+    <script>
+        // --- 1. CONFIGURACIÓN Y DATOS ---
+        const TELEFONO_WHATSAPP = "527298272377";
+        
+        const CATALOGO = {
+            "Maquillaje": [
+                {
+                    id: "maq_1", tag: "Lo más vendido", title: "Labial Líquido Mate Indeleble Forever", subtitle: "Labial líquido de larga duración con Vitamina B5",
+                    price: "$450.00 MXN", precio_anterior: "$600.00 MXN", calificacion: "⭐⭐⭐⭐⭐",
+                    descripcion: "Labial líquido Mate Indeleble con Vitamina B5 7 g e. 24 oz. (1.86 x 1.86 x 10.50 cm)",
+                    imagen: "https://lbelmexico.vtexassets.com/arquivos/ids/1164889-500-auto?v=639175334237900000&width=500&height=auto&aspect=true",
+                    galeria: [
+                        "https://belcorpmexico.vtexassets.com/arquivos/ids/1164885-1600-auto?v=639175334233400000&width=1600&height=auto&aspect=true",
+                        "https://belcorpmexico.vtexassets.com/arquivos/ids/1164886-1600-auto?v=639175334234800000&width=1600&height=auto&aspect=true",
+                        "https://belcorpmexico.vtexassets.com/arquivos/ids/1164887-1600-auto?v=639175334235900000&width=1600&height=auto&aspect=true"
+                    ]
+                }
+            ],
+            "Ropa y Tenis": [
+                {
+                    id: "tenis_1", tag: "Materiales reciclados", title: "Nike Air Max Muse", subtitle: "Tenis para mujer",
+                    price: "$3,299.00 MXN", precio_anterior: "$3,800.00 MXN", calificacion: "⭐⭐⭐⭐⭐ (89)",
+                    descripcion: "Diseño futurista inspirado en la era Y2K. Cuenta con la clásica amortiguación Air Max que brinda comodidad absoluta.",
+                    imagen: "https://placehold.co/600x600/f6f6f6/888888?text=Air+Max+1",
+                    galeria: ["https://placehold.co/600x600/f6f6f6/888888?text=Air+Max+1"]
+                }
+            ],
+            "Perfumes": [
+                {
+                    id: "perf_1", tag: "Top Sellers", title: "Bleu Night Perfume para Hombre 100 ml.", subtitle: "Perfume de alta concentración",
+                    price: "$550.00 MXN", precio_anterior: "$780.00 MXN", calificacion: "⭐⭐⭐⭐⭐",
+                    descripcion: "Perfume fresco para hombre de muy alta concentración de la familia olfativa herbal maderoso. Notas intensas que perduran todo el día.",
+                    imagen: "https://belcorpmexico.vtexassets.com/arquivos/ids/1157847-500-auto?v=639175215758830000&width=500&height=auto&aspect=true",
+                    galeria: [
+                        "https://belcorpmexico.vtexassets.com/arquivos/ids/1157844-1600-auto?v=639175215755400000&width=1600&height=auto&aspect=true",
+                        "https://belcorpmexico.vtexassets.com/arquivos/ids/1157845-1600-auto?v=639175215756930000&width=1600&height=auto&aspect=true",
+                        "https://belcorpmexico.vtexassets.com/arquivos/ids/1157846-1600-auto?v=639175215757900000&width=1600&height=auto&aspect=true"
+                    ]
+                }
+            ]
+        };
+
+        // --- 2. ESTADO DE LA APLICACIÓN (Equivalente a st.session_state) ---
+        let nombreActual = "";
+        let carrito = [];
+        let productoSeleccionado = null;
+        let tabActual = "Maquillaje";
+
+        // --- 3. INICIALIZACIÓN ---
+        window.onload = function() {
+            // Leer nombre de la URL (Query Params)
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('nombre')) {
+                nombreActual = urlParams.get('nombre');
+                document.getElementById('nombre-usuario-display').innerText = nombreActual;
+                mostrarPantalla('tienda');
+                renderizarCatalogo();
+            } else {
+                mostrarPantalla('inicio');
+            }
+        };
+
+        // --- 4. CONTROL DE PANTALLAS ---
+        function mostrarPantalla(pantalla) {
+            document.getElementById('pantalla-inicio').classList.add('oculto');
+            document.getElementById('pantalla-tienda').classList.add('oculto');
+            document.getElementById('pantalla-detalle').classList.add('oculto');
+            document.getElementById('pantalla-carrito').classList.add('oculto');
+
+            if (pantalla === 'inicio') document.getElementById('pantalla-inicio').classList.remove('oculto');
+            if (pantalla === 'tienda') document.getElementById('pantalla-tienda').classList.remove('oculto');
+            if (pantalla === 'detalle') document.getElementById('pantalla-detalle').classList.remove('oculto');
+            if (pantalla === 'carrito') document.getElementById('pantalla-carrito').classList.remove('oculto');
+        }
+
+        // --- 5. FUNCIONES DE USUARIO ---
+        function entrarTienda() {
+            const input = document.getElementById('input-nombre').value.trim();
+            if (input) {
+                // Actualizar URL sin recargar la página
+                const url = new URL(window.location);
+                url.searchParams.set('nombre', input);
+                window.history.pushState({}, '', url);
+                
+                nombreActual = input;
+                document.getElementById('nombre-usuario-display').innerText = nombreActual;
+                mostrarPantalla('tienda');
+                renderizarCatalogo();
+            } else {
+                document.getElementById('error-nombre').style.display = 'block';
+            }
+        }
+
+        function cerrarSesion() {
+            const url = new URL(window.location);
+            url.searchParams.delete('nombre');
+            window.history.pushState({}, '', url);
+            nombreActual = "";
+            carrito = [];
+            actualizarBotonBolsa();
+            mostrarPantalla('inicio');
+        }
+
+        // --- 6. FUNCIONES DE TIENDA Y CATÁLOGO ---
+        function cambiarTab(categoria) {
+            tabActual = categoria;
+            // Actualizar clases visuales de los tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => t.classList.remove('activo'));
+            event.target.classList.add('activo');
+            renderizarCatalogo();
+        }
+
+        function renderizarCatalogo() {
+            const grid = document.getElementById('grid-productos');
+            grid.innerHTML = ""; // Limpiar grid
+            
+            const productos = CATALOGO[tabActual] || [];
+            if (productos.length === 0) {
+                grid.innerHTML = "<p style='color:#b3b3b3;'>Próximamente más productos.</p>";
+                return;
+            }
+
+            productos.forEach(prod => {
+                const div = document.createElement('div');
+                div.className = 'tarjeta-prod';
+                div.innerHTML = `
+                    <div>
+                        <img src="${prod.imagen}" alt="${prod.title}">
+                        <div class="etiqueta-tag">${prod.tag || ''}</div>
+                        <div class="titulo-prod">${prod.title}</div>
+                        <div class="subtitulo-prod">${prod.subtitle || ''}</div>
+                        <div class="precio-prod">${prod.price}</div>
+                    </div>
+                    <button class="btn btn-secondary" onclick='verDetalle("${prod.id}", "${tabActual}")'>Ver detalles del producto 🔎</button>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        function volverCatálogo() {
+            productoSeleccionado = null;
+            mostrarPantalla('tienda');
+        }
+
+        // --- 7. FUNCIONES DE DETALLE DE PRODUCTO ---
+        function verDetalle(id, categoria) {
+            productoSeleccionado = CATALOGO[categoria].find(p => p.id === id);
+            
+            let miniaturasHTML = "";
+            if(productoSeleccionado.galeria) {
+                productoSeleccionado.galeria.forEach(imgUrl => {
+                    miniaturasHTML += `<img src="${imgUrl}" onclick="cambiarImagenPrincipal('${imgUrl}')">`;
+                });
+            }
+
+            const html = `
+                <div class="detalle-container">
+                    <div>
+                        <img id="img-principal-detalle" src="${productoSeleccionado.imagen}" style="width:100%; border-radius:10px;">
+                        <p style='font-size:0.8rem; color:#757575; text-align:center; margin-top:10px;'>Vistas</p>
+                        <div class="galeria-minis">
+                            ${miniaturasHTML}
+                        </div>
+                    </div>
+                    <div>
+                        <div class="badge-detalle">${productoSeleccionado.tag || ''}</div>
+                        <div class="titulo-detalle">${productoSeleccionado.title}</div>
+                        <div class="calif-detalle">${productoSeleccionado.calificacion || ''}</div>
+                        
+                        <div class="seccion-descripcion">
+                            <b style="font-size:1.1rem; color:#ffffff;">¿Qué es?</b><br>
+                            <p style="color:#b3b3b3; margin-top:5px; font-size:1rem; line-height:1.5;">${productoSeleccionado.descripcion}</p>
+                        </div>
+                        
+                        <div style="margin-bottom: 25px;">
+                            ${productoSeleccionado.precio_anterior ? `<span class="precio-anterior">${productoSeleccionado.precio_anterior}</span>` : ''}
+                            <span class="precio-actual">${productoSeleccionado.price}</span>
+                        </div>
+                        
+                        <div style="display:flex; gap:15px; align-items:center;">
+                            <input type="number" id="input-cantidad" class="input-cantidad" value="1" min="1" max="10">
+                            <button class="btn btn-primary" style="flex-grow:1;" onclick="agregarAlCarrito()">Agregar a la bolsa</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('contenedor-detalle').innerHTML = html;
+            mostrarPantalla('detalle');
+        }
+
+        function cambiarImagenPrincipal(url) {
+            document.getElementById('img-principal-detalle').src = url;
+        }
+
+        // --- 8. LÓGICA DEL CARRITO DE COMPRAS ---
+        function limpiarPrecio(precioStr) {
+            return parseFloat(precioStr.replace("$", "").replace("MXN", "").replace(/,/g, "").trim()) || 0;
+        }
+
+        function agregarAlCarrito() {
+            const cantidad = parseInt(document.getElementById('input-cantidad').value) || 1;
+            const precioNum = limpiarPrecio(productoSeleccionado.price);
+            
+            // Buscar si ya existe
+            const index = carrito.findIndex(item => item.id === productoSeleccionado.id);
+            if (index > -1) {
+                carrito[index].cantidad += cantidad;
+                carrito[index].total_item = carrito[index].cantidad * precioNum;
+            } else {
+                carrito.push({
+                    id: productoSeleccionado.id,
+                    title: productoSeleccionado.title,
+                    precio_texto: productoSeleccionado.price,
+                    precio_unitario: precioNum,
+                    cantidad: cantidad,
+                    total_item: cantidad * precioNum,
+                    imagen: productoSeleccionado.imagen
+                });
+            }
+            
+            actualizarBotonBolsa();
+            alert("¡Agregado exitosamente a tu bolsa! 🛍️");
+        }
+
+        function actualizarBotonBolsa() {
+            const totalArticulos = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+            document.getElementById('btn-bolsa').innerText = `🛍️ Mi Bolsa (${totalArticulos})`;
+        }
+
+        function mostrarCarrito() {
+            const divLista = document.getElementById('lista-carrito');
+            const divResumen = document.getElementById('resumen-carrito');
+            
+            if (carrito.length === 0) {
+                divLista.innerHTML = "<h3 style='color:#b3b3b3;'>Tu bolsa está vacía. ¡Explora el catálogo para añadir productos!</h3>";
+                divResumen.classList.add('oculto');
+            } else {
+                divLista.innerHTML = "";
+                let subtotal = 0;
+                
+                carrito.forEach((item, index) => {
+                    subtotal += item.total_item;
+                    divLista.innerHTML += `
+                        <div class="item-carrito">
+                            <img src="${item.imagen}">
+                            <div class="item-info">
+                                <h3 style="margin:0 0 5px 0;">${item.title}</h3>
+                                <p style="margin:2px 0; color:#b3b3b3;">Precio Unitario: <b style="color:white">${item.precio_texto}</b></p>
+                                <p style="margin:2px 0; color:#b3b3b3;">Cantidad: <b style="color:white">${item.cantidad}</b></p>
+                                <p style="margin:2px 0; color:#b3b3b3;">Total: <b style="color:white">$${item.total_item.toLocaleString('en-US', {minimumFractionDigits: 2})} MXN</b></p>
+                            </div>
+                            <button class="btn btn-secondary" style="width:auto; padding:10px;" onclick="eliminarDelCarrito(${index})">🗑️</button>
+                        </div>
+                    `;
+                });
+                
+                document.getElementById('total-carrito').innerText = `$${subtotal.toLocaleString('en-US', {minimumFractionDigits: 2})} MXN`;
+                divResumen.classList.remove('oculto');
+                
+                // Generar Link WhatsApp
+                let mensaje = `🌸 *NUEVO PEDIDO - CLOSET MIRI PRODUCTS* 🌸\n\n`;
+                mensaje += `👤 *Cliente:* ${nombreActual}\n`;
+                mensaje += `-----------------------------------------\n`;
+                mensaje += `📦 *Detalle de la compra:*\n`;
+                
+                carrito.forEach(item => {
+                    mensaje += `• *${item.cantidad}x* ${item.title} (${item.precio_texto})\n`;
+                });
+                
+                mensaje += `-----------------------------------------\n`;
+                mensaje += `💵 *Total estimado:* $${subtotal.toLocaleString('en-US', {minimumFractionDigits: 2})} MXN\n\n`;
+                mensaje += `¡Muchas gracias! ✨`;
+                
+                const linkWa = `https://wa.me/${TELEFONO_WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
+                document.getElementById('btn-whatsapp').href = linkWa;
+            }
+            
+            mostrarPantalla('carrito');
+        }
+
+        function eliminarDelCarrito(index) {
+            carrito.splice(index, 1);
+            actualizarBotonBolsa();
+            mostrarCarrito(); // Re-renderizar la vista
+        }
+    </script>
+</body>
+</html>
