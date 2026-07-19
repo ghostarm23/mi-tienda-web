@@ -9,7 +9,22 @@
            ESTILOS VISUALES (CSS)
            ===================================================================== */
         * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #121212; color: #ffffff; margin: 0; padding: 20px; }
+        body { 
+    background-color: #121212; 
+    /* 👇 Aquí agregas la imagen de fondo 👇 */
+    background-image: url('https://wallpapers.com/images/high/lion-of-judah-pictures-p2hivery1mdkgz1a.webp'); 
+    background-size: cover; /* Hace que la imagen cubra toda la pantalla sin deformarse */
+    background-position: center; /* Centra la imagen */
+    background-attachment: fixed; /* La imagen se queda quieta aunque bajes en la página */
+    
+    /* Fondo oscuro semitransparente para que las letras se sigan leyendo bien */
+    box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.6); 
+    
+    color: #ffffff; 
+    margin: 0; 
+    padding: 20px; 
+    min-height: 100vh;
+}
         
         /* Utilidades */
         .oculto { display: none !important; }
@@ -71,7 +86,7 @@
 
     <!-- PANTALLA 1: INICIO (CRISTAL) -->
     <div id="pantalla-inicio" class="contenedor-cristal oculto">
-        <h1 style='font-size: 3.5rem; font-weight: 800; margin-top: 0;'>closet miri products</h1>
+        <h1 style='font-size: 3.5rem; font-weight: 800; margin-top: 0;'>𝓒𝓵𝓸𝓼𝓮𝓽 𝓜𝓲𝓻𝓲 𝓟𝓻𝓸𝓭𝓾𝓬𝓽𝓼 "𝓡𝓐𝓟𝓗𝓐"</h1>
         <p style='font-size: 1.3rem; color: #b3b3b3;'>Te damos la bienvenida. Ingresa tu nombre para comenzar:</p>
         <input type="text" id="input-nombre" class="input-nombre" placeholder="Tu nombre aquí...">
         <button class="btn btn-primary" onclick="entrarTienda()">Entrar a la tienda</button>
@@ -82,7 +97,7 @@
     <div id="pantalla-tienda" class="oculto">
         <div class="header-tienda">
             <div>
-                <h1 style='margin-bottom: 0; margin-top: 0;'>closet miri products</h1>
+                <h1 style='margin-bottom: 0; margin-top: 0;'>𝓒𝓵𝓸𝓼𝓮𝓽 𝓜𝓲𝓻𝓲 𝓟𝓻𝓸𝓭𝓾𝓬𝓽𝓼 "𝓡𝓐𝓟𝓗𝓐"</h1>
                 <p style='color: #b3b3b3; margin-top: 5px;'>¡Hola, de nuevo, <b id="nombre-usuario-display"></b>! ✨</p>
             </div>
             <div class="header-acciones">
